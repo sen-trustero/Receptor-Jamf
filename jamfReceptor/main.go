@@ -4,7 +4,7 @@ package main
 
 /* TODO: Change import name */
 import (
-	receptorPackage "../jamfReceptor/receptorPackage"
+	receptorPackage "github.com/sen-trustero/Receptor-Jamf/jamf-receptor/jamfReceptor/receptorPackage"
 
 	"github.com/trustero/api/go/receptor_sdk"
 	"github.com/trustero/api/go/receptor_sdk/cmd"

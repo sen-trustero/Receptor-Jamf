@@ -2,7 +2,7 @@
 package receptorPackage
 
 import (
-	receptorLog "github.com/trustero/api/go/examples/gitlab_receptor/logging"
+	receptorLog "github.com/sen-trustero/Receptor-Jamf/jamf-receptor/jamfReceptor/logging"
 
 	"github.com/trustero/api/go/receptor_sdk"
 	"github.com/trustero/api/go/receptor_v1"
