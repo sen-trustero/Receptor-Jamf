@@ -32,7 +32,7 @@ require (
 	github.com/spf13/pflag v1.0.5 // indirect
 	github.com/spf13/viper v1.12.0 // indirect
 	github.com/subosito/gotenv v1.3.0 // indirect
-	github.com/trustero/jamf-api-client-go v0.0.0-20220722001626-59ff06395300 // indirect
+	github.com/trustero/jamf-api-client-go v0.0.0-20220722001626-59ff06395300 // direct
 	golang.org/x/net v0.0.0-20220624214902-1bab6f366d9e // indirect
 	golang.org/x/oauth2 v0.0.0-20220722155238-128564f6959c // indirect
 	golang.org/x/sys v0.0.0-20220610221304-9f5ed59c137d // indirect
