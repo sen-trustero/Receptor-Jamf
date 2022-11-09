@@ -9,6 +9,12 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+var demoCredentials = receptorPackage.Credentials{
+	UserName: "demo",
+	Password: "tryitout",
+	BaseUrl:  "https://dummy.jamfcloud.com",
+}
+
 func TestGetReceptorTypeImpl(t *testing.T) {
 	/* TODO: Write tests */
 	assert.Equal(t, "trr-jamf", receptorPackage.GetReceptorTypeImpl())
@@ -23,20 +29,20 @@ func TestGetKnownServicesImpl(t *testing.T) {
 
 func TestVerify(t *testing.T) {
 	/* TODO: Write tests */
-	ok, err := receptorPackage.VerifyImpl(url, userName, password)
+	ok, err := receptorPackage.VerifyImpl(demoCredentials.BaseUrl, demoCredentials.UserName, demoCredentials.Password)
 	assert.False(t, ok)
 	assert.Nil(t, err)
 }
 
 func TestDiscover(t *testing.T) {
 	/* TODO: Write tests */
-	svcs, err := receptorPackage.DiscoverImpl(url, userName, password)
+	svcs, err := receptorPackage.DiscoverImpl(demoCredentials.BaseUrl, demoCredentials.UserName, demoCredentials.Password)
 	assert.Len(t, svcs, 0)
 	assert.Nil(t, err)
 }
 func TestReport(t *testing.T) {
 	/* TODO: Write tests */
-	evs, err := receptorPackage.ReportImpl(url, userName, password)
+	evs, err := receptorPackage.ReportImpl(demoCredentials.BaseUrl, demoCredentials.UserName, demoCredentials.Password)
 	assert.Len(t, evs, 0)
 	assert.Nil(t, err)
 }

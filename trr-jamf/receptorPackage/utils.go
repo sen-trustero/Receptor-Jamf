@@ -2,59 +2,64 @@
 package receptorPackage
 
 import (
-	"github.com/rs/zerolog/log"
+	"fmt"
+	"github.com/trustero/api/go/receptor_sdk"
 	computers "github.com/trustero/jamf-api-client-go/classic/computers"
-	"net/http"
-	"sync"
+	receptorLog "receptor/trr-jamf/logging"
 )
-
-/* TODO: Write any helper functions here */
-type Discovered struct {
-	Computers []*computers.Computer `json:"computers"`
-}
 
 type computerResponse struct {
 	computer *computers.Computer
 	apiCalls []string
 }
 
-const serviceId = "trs86"
+type Credentials struct {
+	UserName string `json:"username"`
+	Password string `json:"password"`
+	BaseUrl  string `json:"base_url"`
+}
 
-func findComputers(computerService *computers.Service) (computerInfo []*computers.Computer, apiCalls []string, err error) {
+type JamfComputerInfo struct {
+	Username        string `trustero:"id:;display:Username;order:1"`
+	Email           string `trustero:"display:Email;order:2"`
+	ComputerId      string `trustero:"display:Computer Id;order:3"`
+	OsVersion       string `trustero:"display:OS Version;order:4"`
+	MacAddress      string `trustero:"display:MAC Address;order:5"`
+	Users           int    `trustero:"display:Users;order:6"`
+	FilevaultUsers  int    `trustero:"display:Filevault Users;order:7"`
+	XprotectVersion string `trustero:"display:Xprotect Version;order:8"`
+}
+
+func getComputerEvidence(computerService *computers.Service) (evidence *receptor_sdk.Evidence, err error) {
 	computerList, resp, err := computerService.List()
 	if err != nil {
 		return
 	}
-	apiCalls = append(apiCalls, resp.Request.URL.String())
+	evidence = receptor_sdk.NewEvidence(serviceName, "Jamf Computers", "Computer List", "List of Computers in Jamf")
+	evidence.AddSource(resp.Request.URL.String(), resp.Body)
+	for _, cmp := range computerList {
+		result := &computerResponse{}
+		if result.computer, resp, err = computerService.GetById(cmp.Id); err != nil {
+			receptorLog.Error(err.Error())
+			return
+		}
 
-	out := make(chan *computerResponse, 100)
+		item := JamfComputerInfo{
+			Username:        result.computer.UserLocation.RealName,
+			Email:           result.computer.UserLocation.EmailAddress,
+			ComputerId:      result.computer.General.UDID,
+			OsVersion:       fmt.Sprintf("%s %s", result.computer.Hardware.OSName, result.computer.Hardware.OSVersion),
+			MacAddress:      result.computer.General.MACAddress,
+			Users:           len(result.computer.Groups.Memberships),
+			FilevaultUsers:  len(result.computer.Hardware.FilevaultUsers),
+			XprotectVersion: result.computer.Hardware.XProtectVersion,
+		}
 
-	go getComputerInfo(computerService, computerList, out)
-	for computer := range out {
-		computerInfo = append(computerInfo, computer.computer)
-		apiCalls = append(apiCalls, computer.apiCalls...)
+		evidence.AddSource(resp.Request.URL.String(), resp.Body)
+
+		evidence.AddRow(item)
+
 	}
+
 	return
-}
-
-func getComputerInfo(computerService *computers.Service, computerList []computers.ComputerNameId, out chan *computerResponse) {
-	defer close(out)
-	var pg sync.WaitGroup
-
-	for _, p := range computerList {
-		pg.Add(1)
-		go func(id int) {
-			defer pg.Done()
-			result := &computerResponse{}
-			var resp *http.Response
-			var err error
-			if result.computer, resp, err = computerService.GetById(id); err != nil {
-				log.Error().Msgf(err.Error())
-				return
-			}
-			result.apiCalls = append(result.apiCalls, resp.Request.URL.String())
-			out <- result
-		}(p.Id)
-	}
-	pg.Wait()
 }
