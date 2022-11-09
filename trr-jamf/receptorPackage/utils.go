@@ -3,24 +3,19 @@ package receptorPackage
 
 import (
 	"fmt"
+	receptorLog "receptor/trr-jamf/logging"
+
 	"github.com/trustero/api/go/receptor_sdk"
 	computers "github.com/trustero/jamf-api-client-go/classic/computers"
-	receptorLog "receptor/trr-jamf/logging"
 )
 
 type computerResponse struct {
 	computer *computers.Computer
-	apiCalls []string
-}
-
-type Credentials struct {
-	UserName string `json:"username"`
-	Password string `json:"password"`
-	BaseUrl  string `json:"base_url"`
+	//apiCalls []string
 }
 
 type JamfComputerInfo struct {
-	Username        string `trustero:"id:;display:Username;order:1"`
+	Username        string `trustero:"display:Username;order:1"`
 	Email           string `trustero:"display:Email;order:2"`
 	ComputerId      string `trustero:"display:Computer Id;order:3"`
 	OsVersion       string `trustero:"display:OS Version;order:4"`
@@ -33,10 +28,12 @@ type JamfComputerInfo struct {
 func getComputerEvidence(computerService *computers.Service) (evidence *receptor_sdk.Evidence, err error) {
 	computerList, resp, err := computerService.List()
 	if err != nil {
+		receptorLog.Err(err, "could not generate evidence, error in getComputerEvidence")
 		return
 	}
-	evidence = receptor_sdk.NewEvidence(serviceName, "Jamf Computers", "Computer List", "List of Computers in Jamf")
-	evidence.AddSource(resp.Request.URL.String(), resp.Body)
+
+	evidence = receptor_sdk.NewEvidence(serviceName, "JamfComputers", "ComputerList", "List of Computers in Jamf")
+	evidence.AddSource(resp.Request.URL.String(), computerList)
 	for _, cmp := range computerList {
 		result := &computerResponse{}
 		if result.computer, resp, err = computerService.GetById(cmp.Id); err != nil {
@@ -55,9 +52,8 @@ func getComputerEvidence(computerService *computers.Service) (evidence *receptor
 			XprotectVersion: result.computer.Hardware.XProtectVersion,
 		}
 
-		evidence.AddSource(resp.Request.URL.String(), resp.Body)
-
 		evidence.AddRow(item)
+		evidence.AddSource(resp.Request.URL.String(), result.computer)
 
 	}
 
