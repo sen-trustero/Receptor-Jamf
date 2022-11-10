@@ -1,10 +1,10 @@
 package receptorPackage
 
 import (
+	receptorLog "//github.com/sen-trustero/Receptor-Jamf/logging"
 	"github.com/trustero/api/go/receptor_sdk"
 	"github.com/trustero/api/go/receptor_v1"
-	"github.com/trustero/jamf-api-client-go/classic/computers"
-	receptorLog "//github.com/sen-trustero/Receptor-Jamf/logging"
+	"github.com/trustero/jamf-api-client-go/classicocgmputers
 )
 
 func GetReceptorTypeImpl() string {
