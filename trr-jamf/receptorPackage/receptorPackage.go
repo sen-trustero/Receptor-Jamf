@@ -16,6 +16,7 @@ func GetKnownServicesImpl() []string {
 }
 
 func VerifyImpl(baseurl string, username string, password string) (ok bool, err error) {
+	receptorLog.Info("Entering VerifyImpl")
 	_, err = computers.NewService(baseurl, username, password, nil)
 	if err != nil {
 		receptorLog.Err(err, "Could not verify, error in Jamf Computers NewService for %s ", username)
@@ -27,10 +28,10 @@ func VerifyImpl(baseurl string, username string, password string) (ok bool, err 
 
 func DiscoverImpl(baseUrl string, username string, password string) (svcs []*receptor_v1.ServiceEntity, err error) {
 	receptorLog.Info("Entering DiscoverImpl")
-	//services := receptor_sdk.NewServiceEntities()
-	//services.AddService(serviceName, serviceId, "ComputerList", "1")
+	services := receptor_sdk.NewServiceEntities()
+	services.AddService(serviceName, serviceId, "ComputerList", "1")
 	receptorLog.Info("Leaving DiscoverImpl")
-	return //services.Entities, err
+	return services.Entities, err
 }
 
 func ReportImpl(baseurl string, username string, password string) (evidences []*receptor_sdk.Evidence, err error) {

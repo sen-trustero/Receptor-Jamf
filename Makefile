@@ -1,6 +1,6 @@
 GOCMD=go
 GOTEST=$(GOCMD) test
-RECEPTOR_PACKAGE?=receptor/trr-jamf/receptorPackage_test
+RECEPTOR_PACKAGE?=./trr-jamf/receptorPackage
 
 GREEN  := $(shell tput -Txterm setaf 2)
 YELLOW := $(shell tput -Txterm setaf 3)
@@ -28,7 +28,7 @@ coverage: ## Run the tests of the project and report coverage of package functio
 
 goreportcard: ## Run the goreportcard-cli and report the results
 	@echo '${CYAN}Begin goreportcard${RESET}'
-	../../goreportcard/goreportcard-cli  -d $(RECEPTOR_PACKAGE) -v
+	goreportcard-cli  -d $(RECEPTOR_PACKAGE) -v
 	@echo '${CYAN}End goreportcard${RESET}'
 
 
