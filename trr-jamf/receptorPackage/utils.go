@@ -3,15 +3,21 @@ package receptorPackage
 
 import (
 	"fmt"
-	receptorLog "receptor/trr-jamf/logging"
-
 	"github.com/trustero/api/go/receptor_sdk"
 	computers "github.com/trustero/jamf-api-client-go/classic/computers"
+	receptorLog "receptor/logging"
 )
 
-type computerResponse struct {
-	computer *computers.Computer
-	//apiCalls []string
+const (
+	receptorName = "trr-custom"
+	serviceId    = "Custom Service"
+	serviceName  = "Custom Service"
+)
+
+type Credentials struct {
+	Username string `json:"username"`
+	Password string `json:"password"`
+	BaseUrl  string `json:"baseurl"`
 }
 
 type JamfComputerInfo struct {
@@ -31,31 +37,26 @@ func getComputerEvidence(computerService *computers.Service) (evidence *receptor
 		receptorLog.Err(err, "could not generate evidence, error in getComputerEvidence")
 		return
 	}
-
 	evidence = receptor_sdk.NewEvidence(serviceName, "JamfComputers", "ComputerList", "List of Computers in Jamf")
 	evidence.AddSource(resp.Request.URL.String(), computerList)
 	for _, cmp := range computerList {
-		result := &computerResponse{}
-		if result.computer, resp, err = computerService.GetById(cmp.Id); err != nil {
+		var result *computers.Computer
+		if result, resp, err = computerService.GetById(cmp.Id); err != nil {
 			receptorLog.Error(err.Error())
 			return
 		}
-
 		item := JamfComputerInfo{
-			Username:        result.computer.UserLocation.RealName,
-			Email:           result.computer.UserLocation.EmailAddress,
-			ComputerId:      result.computer.General.UDID,
-			OsVersion:       fmt.Sprintf("%s %s", result.computer.Hardware.OSName, result.computer.Hardware.OSVersion),
-			MacAddress:      result.computer.General.MACAddress,
-			Users:           len(result.computer.Groups.Memberships),
-			FilevaultUsers:  len(result.computer.Hardware.FilevaultUsers),
-			XprotectVersion: result.computer.Hardware.XProtectVersion,
+			Username:        result.UserLocation.RealName,
+			Email:           result.UserLocation.EmailAddress,
+			ComputerId:      result.General.UDID,
+			OsVersion:       fmt.Sprintf("%s %s", result.Hardware.OSName, result.Hardware.OSVersion),
+			MacAddress:      result.General.MACAddress,
+			Users:           len(result.Groups.Memberships),
+			FilevaultUsers:  len(result.Hardware.FilevaultUsers),
+			XprotectVersion: result.Hardware.XProtectVersion,
 		}
-
 		evidence.AddRow(item)
-		evidence.AddSource(resp.Request.URL.String(), result.computer)
-
+		evidence.AddSource(resp.Request.URL.String(), result)
 	}
-
 	return
 }

@@ -8,9 +8,9 @@ import (
 )
 
 type Receptor struct {
-	UserName string `trustero:"display:Jamf Username;placeholder:userName"`
+	UserName string `trustero:"display:Jamf Username;placeholder:username"`
 	Password string `trustero:"display:Jamf Password;placeholder:password"`
-	BaseUrl  string `trustero:"display:Jamf Base Url;placeholder:base_Url"`
+	BaseUrl  string `trustero:"display:Jamf Base Url;placeholder:baseurl"`
 }
 
 func (r *Receptor) GetReceptorType() string {

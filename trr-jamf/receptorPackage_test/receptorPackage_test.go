@@ -3,10 +3,9 @@
 package receptorPackage_test
 
 import (
+	"github.com/stretchr/testify/assert"
 	"receptor/trr-jamf/receptorPackage"
 	"testing"
-
-	"github.com/stretchr/testify/assert"
 )
 
 var demoCredentials = receptorPackage.Credentials{
@@ -37,7 +36,7 @@ func TestVerify(t *testing.T) {
 func TestDiscover(t *testing.T) {
 	/* TODO: Write tests */
 	svcs, err := receptorPackage.DiscoverImpl(demoCredentials.BaseUrl, demoCredentials.Username, demoCredentials.Password)
-	assert.Len(t, svcs, 0)
+	assert.Len(t, svcs, 1)
 	assert.Nil(t, err)
 }
 func TestReport(t *testing.T) {
