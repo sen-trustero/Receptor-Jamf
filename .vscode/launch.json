@@ -1,0 +1,25 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [        
+        {
+            "name": "Launch Package",
+            "type": "go",
+            "request": "launch",
+            "mode": "debug",
+            "program": "${workspaceFolder}/main.go",
+            "args": ["scan", 
+                "eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJudHJjZS5jbyIsImlhdCI6MTY2ODAyNDkzOSwiZXhwIjoxNjY4MDMyMTM5LCJzdWIiOiJjZGxpaGZwMWVxbGducmk2M3NuZyIsImFpZCI6ImNjbTl0azkxZXFsaDIyMjQ1bzgwIiwidHRwIjo1fQ.SLrgninv9tDxLXutxo6ySkIJGZ-P1r8HaLZ5XtMlKecAulIvJnb6fKPJnudfkNCEVjPvXWsKF6hqjHsgYD23Dd54SPcPjKnisFbuAqvH4NgSWwgim--3RkmOiqJiEmjB7mLYoHk3QtKmrINtPLNfSI0v8bP1UOS7LhJYj37GeQODt6MibYzsEUhRXZtRG56FzZ--FWm9FcFUvFGkZd-pUavCsXlDGyWxb715IC-isxCp4Pz-l9Rp64VwL4R0WBDvelv2dr69LfO2R0C9VH4jMko_n3ufM9iYGQDxFCnXP7dkA8QDTuZrSL9tzSKAWFH1gt-TwL3NFxOqTiEHQGhZuQ",
+                "--baseurl", "https://trustero.jamfcloud.com",
+                "--username", "trr-jamf",
+                "--password", "nktFc4[?7j4P[1E:",
+                "--receptor-id", "cdlihfp1eqlgnri63sng", 
+                "--find-evidence",
+                "--level", "debug"
+            ],
+            "trace": "verbose"
+        }
+    ]
+}
