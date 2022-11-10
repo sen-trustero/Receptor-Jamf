@@ -3,9 +3,9 @@ package receptorPackage
 
 import (
 	"fmt"
+	receptorLog "github.com/sen-trustero/Receptor-Jamf/logging"
 	"github.com/trustero/api/go/receptor_sdk"
 	computers "github.com/trustero/jamf-api-client-go/classic/computers"
-	receptorLog "receptor/logging"
 )
 
 const (

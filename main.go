@@ -1,10 +1,10 @@
 package main
 
 import (
+	receptorPackage "github.com/sen-trustero/Receptor-Jamf/trr-jamf/receptorPackage"
 	"github.com/trustero/api/go/receptor_sdk"
 	"github.com/trustero/api/go/receptor_sdk/cmd"
 	"github.com/trustero/api/go/receptor_v1"
-	receptorPackage "receptor/trr-jamf/receptorPackage"
 )
 
 type Receptor struct {

@@ -3,8 +3,8 @@
 package receptorPackage_test
 
 import (
+	"github.com/sen-trustero/Receptor-Jamf/trr-jamf/receptorPackage"
 	"github.com/stretchr/testify/assert"
-	"receptor/trr-jamf/receptorPackage"
 	"testing"
 )
 
